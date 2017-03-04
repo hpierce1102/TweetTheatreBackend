@@ -17,11 +17,11 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/tweets', function(req, res, next) {
+router.get('/tweets', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
 
-  let query = req.body.query || null;
-  let maxTweets = req.body.maxTweets || 4;
+  let query = req.query.query || null;
+  let maxTweets = req.query.maxTweets || 4;
 
   if(query === null){
     res.status(400);
