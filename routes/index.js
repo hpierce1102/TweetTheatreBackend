@@ -20,19 +20,25 @@ router.get('/', function(req, res, next) {
 router.post('/tweets', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
 
-    tweetFetcher.getTweets('@realDonaldTrump', 4)
-        .then(function(tweets){
-            tweets = tweets.map(function(tweet){
-                return TweetParser.stripTweet(tweet);
-            });
+  let query = req.body.query || null;
+  let maxTweets = req.body.maxTweets || 4;
 
-            res.json(tweets);
-        })
-        .catch(function(exception){
-          console.error(exception);
-        });
+  if(query === null){
+    res.status(400);
+    res.json({ error : "Query must be provided"});
+  }
 
-  // res.json(ExampleTweets);
+  tweetFetcher.getTweets(query, maxTweets)
+      .then(function(tweets){
+          tweets = tweets.map(function(tweet){
+              return TweetParser.stripTweet(tweet);
+          });
+
+          res.json(tweets);
+      })
+      .catch(function(exception){
+        console.error(exception);
+      });
 });
 
 module.exports = router;
